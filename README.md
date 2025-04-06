@@ -128,4 +128,25 @@ int exp(int x, int n, int m) {
 }
 ```
 
+## insert elements in a Vector, during recursive call
 
+```
+vector<int> solve(int idx, int prev,vector<int>& nums, vector<vector<vector<int>>> &dp){
+        if(idx >= n)return {};
+        if(dp[idx][prev+1].size())return dp[idx][prev+1];
+
+        vector<int> take, notTake;
+        if(prev==-1 || nums[idx]%nums[prev] == 0){
+            take = solve(idx+1, idx,nums, dp);
+            take.insert(take.begin(), nums[idx]);
+        }
+        notTake = solve(idx+1, prev,nums, dp);
+
+        if(take.size() > notTake.size()){
+            return dp[idx][prev+1] = take;
+        }else{
+            return dp[idx][prev+1] = notTake;
+        }
+    }
+
+```
