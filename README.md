@@ -159,3 +159,10 @@ vector<int> solve(int idx, int prev,vector<int>& nums, vector<vector<vector<int>
     }
 
 ```
+
+## Custom sorting in a vector
+```
+	sort(edgeList.begin(), edgeList.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[2] < b[2];
+        });
+```
