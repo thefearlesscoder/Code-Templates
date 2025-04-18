@@ -166,3 +166,9 @@ vector<int> solve(int idx, int prev,vector<int>& nums, vector<vector<vector<int>
             return a[2] < b[2];
         });
 ```
+
+## Convert Character to String 
+```
+	char ch = 'a';
+	string temp = string(1, ch);
+```
