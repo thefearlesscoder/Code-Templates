@@ -172,3 +172,79 @@ vector<int> solve(int idx, int prev,vector<int>& nums, vector<vector<vector<int>
 	char ch = 'a';
 	string temp = string(1, ch);
 ```
+
+## Next Greater Element
+```
+vector<int> nextGreaterElement(const vector<int>& nums) {
+    int n = nums.size();
+    vector<int> nge(n, -1);
+    stack<int> st;
+    for (int i = 2 * n - 1; i >= 0; i--) {
+        while (!st.empty() && st.top() <= nums[i % n]) {
+            st.pop();
+        }
+        if (i < n && !st.empty()) {
+            nge[i] = st.top();
+        }
+        st.push(nums[i % n]);
+    }
+    return nge;
+}
+```
+
+## Next Smaller Element
+```
+vector<int> nextSmallerElement(const vector<int>& nums) {
+    int n = nums.size();
+    vector<int> nse(n, -1);
+    stack<int> st;
+    for (int i = n - 1; i >= 0; i--) {
+        while (!st.empty() && st.top() >= nums[i]) {
+            st.pop();
+        }
+        if (!st.empty()) {
+            nse[i] = st.top();
+        }
+        st.push(nums[i]);
+    }
+    return nse;
+}
+```
+
+## Previous Greater Element
+```
+vector<int> previousGreaterElement(const vector<int>& nums) {
+    int n = nums.size();
+    vector<int> pge(n, -1);
+    stack<int> st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && st.top() <= nums[i]) {
+            st.pop();
+        }
+        if (!st.empty()) {
+            pge[i] = st.top();
+        }
+        st.push(nums[i]);
+    }
+    return pge;
+}
+```
+
+## Previous Smaller Element
+```
+vector<int> previousSmallerElement(const vector<int>& nums) {
+    int n = nums.size();
+    vector<int> pse(n, -1);
+    stack<int> st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && st.top() >= nums[i]) {
+            st.pop();
+        }
+        if (!st.empty()) {
+            pse[i] = st.top();
+        }
+        st.push(nums[i]);
+    }
+    return pse;
+}
+```
