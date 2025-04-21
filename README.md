@@ -248,3 +248,8 @@ vector<int> previousSmallerElement(const vector<int>& nums) {
     return pse;
 }
 ```
+
+## apply MOD when there can be overflow
+```
+ans = (ans + (1LL * arr[i] * (i - left) * (right - i)) % mod) % mod;
+```
