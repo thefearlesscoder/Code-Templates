@@ -248,8 +248,38 @@ vector<int> previousSmallerElement(const vector<int>& nums) {
     return pse;
 }
 ```
+## Find Factorial (genrally precomputed when required)
+```
 
+```
+## Binary Exponentiation
+```
+long long power(long long a, long long b) {
+    long long result = 1;
+    while(b) {
+        if (b & 1) 
+        result = result * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return result; //TIME : log (b);
+}
+```
 ## apply MOD when there can be overflow
 ```
 ans = (ans + (1LL * arr[i] * (i - left) * (right - i)) % mod) % mod;
+```
+
+## Modular nCr
+```
+int modularnCr(int n , int r, int MOD){
+	if(r<0 || r>n){
+		return 0;
+
+	}
+	long long a = fact(n) % MOD;
+	long long b = (fact(r)*fact(n-r)) % MOD;
+
+	return a * power(b, MOD-2) % MOD;
+}
 ```
