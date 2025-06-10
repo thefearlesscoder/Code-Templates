@@ -38,34 +38,90 @@
 ```
 ## Segment Tree
 ```
+#include <bits/stdc++.h>
+using namespace std;
+
 class SegmentTree {
 public:
-    int a[100005], seg[4 * 100005];
+    int a[100005], seg[4 * 100005], lazy[4 * 100005];
 
     void build(int idx, int low, int high) {
         if (low == high) {
             seg[idx] = a[low];
             return;
         }
-        int mid = low + (high - low) / 2;
+        int mid = (low + high) / 2;
         build(2 * idx + 1, low, mid);
         build(2 * idx + 2, mid + 1, high);
-        seg[idx] = max(seg[2 * idx + 1], seg[2 * idx + 2]);
+        seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];
+    }
+    void pointUpdate(int idx, int low, int high, int node, int val) {
+    	 if (low == high) {
+       	 	seg[idx] += val;  // Correct: update the segment tree node
+        	return;
+    	 }
+
+    	 int mid = low + (high - low) / 2;
+
+   	 if (node <= mid)
+		pointUpdate(2 * idx + 1, low, mid, node, val);
+    	else
+        	pointUpdate(2 * idx + 2, mid + 1, high, node, val);
+
+   	 seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];  // Update parent node
+      }
+
+
+    void rangeUpdate(int idx, int low, int high, int l, int r, int val) {
+        // Apply pending updates
+        if (lazy[idx] != 0) {
+            seg[idx] += (high - low + 1) * lazy[idx];
+            if (low != high) {
+                lazy[2 * idx + 1] += lazy[idx];
+                lazy[2 * idx + 2] += lazy[idx];
+            }
+            lazy[idx] = 0;
+        }
+
+        if (r < low || l > high || low > high) return; // no overlap
+
+        if (low >= l && high <= r) { // total overlap
+            seg[idx] += (high - low + 1) * val;
+            if (low != high) {
+                lazy[2 * idx + 1] += val;
+                lazy[2 * idx + 2] += val;
+            }
+            return;
+        }
+
+        // partial overlap
+        int mid = (low + high) / 2;
+        rangeUpdate(2 * idx + 1, low, mid, l, r, val);
+        rangeUpdate(2 * idx + 2, mid + 1, high, l, r, val);
+        seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];
     }
 
-    int query(int idx, int low, int high, int l, int r) {
-        if (low >= l && high <= r) {
-            return seg[idx];
+    int querySumLazy(int idx, int low, int high, int l, int r) {
+        if (lazy[idx] != 0) {
+            seg[idx] += (high - low + 1) * lazy[idx];
+            if (low != high) {
+                lazy[2 * idx + 1] += lazy[idx];
+                lazy[2 * idx + 2] += lazy[idx];
+            }
+            lazy[idx] = 0;
         }
-        if (high < l || low > r) {
-            return INT_MIN;
-        }
-        int mid = low + (high - low) / 2;
-        int left = query(2 * idx + 1, low, mid, l, r);
-        int right = query(2 * idx + 2, mid + 1, high, l, r);
-        return max(left, right);
+
+        if (r < low || l > high || low > high) return 0; // no overlap
+
+        if (low >= l && high <= r) return seg[idx]; // total overlap
+
+        // partial overlap
+        int mid = (low + high) / 2;
+        return querySumLazy(2 * idx + 1, low, mid, l, r) +
+               querySumLazy(2 * idx + 2, mid + 1, high, l, r);
     }
 };
+
 ```
 
 ## Upper bound code
