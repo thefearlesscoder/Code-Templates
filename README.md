@@ -450,3 +450,66 @@ string findLongestPalindromicString(string text) {
         return ans;
     }
 ```
+
+## sample DIGIT DP code 
+```
+#include <bits/stdc++.h>
+#define int long long int
+#define no cout<<"NO"<<endl;
+#define yes cout<<"YES"<<endl;
+#define Sort(v) sort(v.begin(), v.end())
+#define Sortr(v) sort(v.rbegin(), v.rend())
+#define vecpair vector<pair<int, int>> 
+#define loop1(i,n) for(int i=0;i<n;i++)
+#define loop2(i,n) for(int i=1;i<=n;i++)
+#define print1(x) cout<<x<<endl;
+#define print2(x) cout<<x<<" ";
+#define NL cout<<"\n";
+#define umap unordered_map
+#define all(v) v.begin(), v.end()
+using namespace std;
+// to print cout of digit 3 in all the numbers form l to r
+// digit DP sort of template 
+int dp[20][2][20]; //[index][tight][count]
+int solve(string &s, int idx, int tight, int count){
+    if(idx == s.length()) return count;
+    if(dp[idx][tight][count]!=-1)return dp[idx][tight][count];
+    int limit = (tight == 1 ? s[idx]-'0' : 9);
+    int ans = 0;
+    for(int i=0;i<=limit;i++){
+        int update = count+(i==3)?1:0;
+        ans+=solve(s, idx+1, (tight & (i==s[idx]-'0')), update);
+    }
+    return dp[idx][tight][count] = ans;
+}
+void vivek()
+{   
+    int l, r;
+    cin >> l >> r;
+    
+    string ri = to_string(r);
+    memset(dp, -1, sizeof(dp));
+    int rightAns = solve(ri, 0, 1, 0); //idx, tight=1, count = 0 -> tight = 1 initiall since once false it remail false;
+    string le = to_string(l-1);
+    memset(dp, -1, sizeof(dp));
+    int leftAns = solve(le, 0, 1, 0);
+    
+    cout<< rightAns - leftAns<<endl;
+}
+
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t = 1;
+    // /*is Single Test case?*/ cin >> t;
+    while (t--)
+    {
+        vivek();
+    }
+
+    cerr << "time taken : " << (float)clock() / CLOCKS_PER_SEC << " secs" << endl;
+    return 0;
+}
+
+```
