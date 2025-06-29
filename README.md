@@ -213,14 +213,17 @@ bool checkprime(int n)
 ```
 int exp(int x, int n, int m) {
 	assert(n >= 0);
-	x %= m;  // note: m * m must be less than 2^63 to avoid ll overflow
-	int res = 1;
+	long long res = 1;
+	long long base = x % m;
+
 	while (n > 0) {
-		if (n % 2 == 1) { res = res * x % m; }
-		x = x * x % m;
+		if (n % 2 == 1) {
+			res = (res * base) % m;
+		}
+		base = (base * base) % m;
 		n /= 2;
 	}
-	return res;
+	return (int)res;
 }
 ```
 
