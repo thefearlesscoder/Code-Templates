@@ -36,91 +36,65 @@
       }
   };
 ```
-## Segment Tree
+## Binary lifting
 ```
-#include <bits/stdc++.h>
-using namespace std;
+vector<vector<int>> table;
+int mx = 19; // this mx is quite large , any will be reahed only in few cases 
+// so improve time we can set mx baaed on the value of N.
+// so this max = ceil(LOG2(N)); 
 
-class SegmentTree {
-public:
-    int a[100005], seg[4 * 100005], lazy[4 * 100005];
+void build(int n){
+    table[0] = parent;
 
-    void build(int idx, int low, int high) {
-        if (low == high) {
-            seg[idx] = a[low];
-            return;
+    for(int i = mx-1;i>=0;i--){
+        for(int node = 1;node<=n;node++){
+            table[i][node]= table[i-1][table[i-1][node]];
         }
-        int mid = (low + high) / 2;
-        build(2 * idx + 1, low, mid);
-        build(2 * idx + 2, mid + 1, high);
-        seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];
     }
-    void pointUpdate(int idx, int low, int high, int node, int val) {
-    	 if (low == high) {
-       	 	seg[idx] += val;  // Correct: update the segment tree node
-        	return;
-    	 }
+}
 
-    	 int mid = low + (high - low) / 2;
-
-   	 if (node <= mid)
-		pointUpdate(2 * idx + 1, low, mid, node, val);
-    	else
-        	pointUpdate(2 * idx + 2, mid + 1, high, node, val);
-
-   	 seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];  // Update parent node
-      }
-
-
-    void rangeUpdate(int idx, int low, int high, int l, int r, int val) {
-        // Apply pending updates
-        if (lazy[idx] != 0) {
-            seg[idx] += (high - low + 1) * lazy[idx];
-            if (low != high) {
-                lazy[2 * idx + 1] += lazy[idx];
-                lazy[2 * idx + 2] += lazy[idx];
-            }
-            lazy[idx] = 0;
+int calJump(int c){
+    int curr = jump[c];
+    if(occ[curr])return 0;
+    int jmp = 1;
+    for(int j = mx-1;j>=0;j--){
+        int jp = table[j][curr]; //2^j th parent of curr;
+        if(occ[jp]) continue;
+        else{
+            curr = jp;
+            jmp += 1<<j;
         }
-
-        if (r < low || l > high || low > high) return; // no overlap
-
-        if (low >= l && high <= r) { // total overlap
-            seg[idx] += (high - low + 1) * val;
-            if (low != high) {
-                lazy[2 * idx + 1] += val;
-                lazy[2 * idx + 2] += val;
-            }
-            return;
-        }
-
-        // partial overlap
-        int mid = (low + high) / 2;
-        rangeUpdate(2 * idx + 1, low, mid, l, r, val);
-        rangeUpdate(2 * idx + 2, mid + 1, high, l, r, val);
-        seg[idx] = seg[2 * idx + 1] + seg[2 * idx + 2];
     }
-
-    int querySumLazy(int idx, int low, int high, int l, int r) {
-        if (lazy[idx] != 0) {
-            seg[idx] += (high - low + 1) * lazy[idx];
-            if (low != high) {
-                lazy[2 * idx + 1] += lazy[idx];
-                lazy[2 * idx + 2] += lazy[idx];
-            }
-            lazy[idx] = 0;
-        }
-
-        if (r < low || l > high || low > high) return 0; // no overlap
-
-        if (low >= l && high <= r) return seg[idx]; // total overlap
-
-        // partial overlap
-        int mid = (low + high) / 2;
-        return querySumLazy(2 * idx + 1, low, mid, l, r) +
-               querySumLazy(2 * idx + 2, mid + 1, high, l, r);
+    occ[curr] = true;
+    return jmp;
+}
+void vivek()
+{   
+    int n;
+    cin >> n;
+    // one based indexing
+    parent.resize(n+1);
+    occ.resize(n+1, false);
+    occ[0]= true;
+    parent[1] = 0;
+    parent[0] = 0;
+    loop2(i, n){
+        cin >> parent[i];
     }
-};
+     jump.resize(n+1);
+     loop2(i, n){
+        cin >> jump[i];
+     } 
+
+     table.resize(mx, vector<int>(n+1, 1));
+
+     build(n);
+
+    for(int i=1;i<=n;i++){
+        int ans = calJump(i);
+        cout<<ans<<endl;
+    }
+}
 
 ```
 
