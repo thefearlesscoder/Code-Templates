@@ -1,3 +1,7 @@
+## last index of character
+```
+auto pos = s.find_last_of('/');
+```
 ## min_element/ max_element
 ```
 int sm = *min_element(a.begin() + l, a.begin() + r + 1); // r is non inclusive so, added 1
