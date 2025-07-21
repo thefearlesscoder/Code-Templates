@@ -10,6 +10,7 @@ int mx = *max_element(a.begin() + l, a.begin() + r + 1);
 ## Count set bits
 ```
     __builtin_popcount(int number);
+x = __builtin_popcountll(x); // for long long
 ```
 ## GCD
 ```
