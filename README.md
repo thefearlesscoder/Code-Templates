@@ -1,5 +1,9 @@
 # Code-Templates
 
+## Fenwik Tree / Binary Indexed Tree
+```
+```
+
 ## Kadane's Algorithm ( maximum sum subarray)
 ```
 int maxSubarraySum(vector<int> &arr) {
