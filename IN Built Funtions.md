@@ -1,3 +1,8 @@
+## Next permutation of an Array
+```
+next_permutation(A.begin(), A.end());
+
+```
 ## last index of character
 ```
 auto pos = s.find_last_of('/');
