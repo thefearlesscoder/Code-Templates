@@ -1,5 +1,10 @@
 # Code-Templates
 
+## check if node u is ancestor of node v
+```
+// Time of discovery concept using DFS
+```
+
 ## Fenwik Tree / Binary Indexed Tree
 ```
 ```
